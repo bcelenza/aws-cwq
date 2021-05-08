@@ -1,6 +1,6 @@
-# CloudWatch Query (`cwq`)
+# CloudWatch Logs Query (`cwq`)
 
-Runs a [CloudWatch Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html) query against a specified set of log groups (one or more). Command output options are available for further parsing of results (e.g. csv, json).
+Executes a [CloudWatch Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html) query against a specified set of log groups (one or more). Command output options are available for further parsing of results (e.g. csv, json).
 
 Start and end times can be provided, but the default will search the last hour.
 

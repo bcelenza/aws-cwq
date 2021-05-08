@@ -12,7 +12,10 @@ import * as yargs from "yargs";
 import * as time from "./time";
 
 const args = yargs
-  .command("cwq", "Runs a CloudWatch insights query")
+  .command(
+    "cwq",
+    "Executes a CloudWatch Logs Insights query and outputs the results"
+  )
   .option("log-group", {
     alias: "l",
     type: "string",
@@ -29,13 +32,13 @@ const args = yargs
     alias: "s",
     type: "string",
     default: "1h",
-    description: "Where to start the search (duration or ISO 8601 format)",
+    description: "When to start the search (duration or ISO 8601 format)",
   })
   .option("end", {
     alias: "e",
     type: "string",
     default: "now",
-    description: "Where to end the search (duration or ISO 8601 format)",
+    description: "When to end the search (duration or ISO 8601 format)",
   })
   .help()
   .alias("help", "h").argv;
@@ -44,7 +47,7 @@ const args = yargs
   // Parse arguments
   const logGroups = args.logGroup;
   if (!logGroups) {
-    throw new Error("At least one log group is required");
+    throw new Error("A log group is required (specify with -l or --log-group)");
   }
   const logGroupNames = Array.isArray(logGroups) ? logGroups : [logGroups];
 
@@ -121,6 +124,6 @@ const args = yargs
       break;
   }
 })().catch((e: Error) => {
-  console.error(e);
+  console.error(`Error: ${e.message}`);
   process.exit(1);
 });
