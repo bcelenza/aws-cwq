@@ -9,13 +9,17 @@ export const parseTimeOrDuration = (timeOrDuration: string): number => {
 
   // check for ISO 8601 format
   if (/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(timeOrDuration)) {
-    return Date.parse(timeOrDuration);
+    const time = Date.parse(timeOrDuration);
+    if (!time) {
+      throw new Error(`Unable to parse time as ISO 8601 format: ${timeOrDuration}`);
+    }
+    return time;
   }
 
-  // otherwise, try to parse as a duration first
+  // otherwise, try to parse as a duration
   const duration = parse(timeOrDuration, "ms");
   if (!duration) {
-    throw new Error(`Unable to parse time: ${timeOrDuration}`);
+    throw new Error(`Unable to parse time as a duration: ${timeOrDuration}`);
   }
   return new Date().getTime() - duration;
 };
