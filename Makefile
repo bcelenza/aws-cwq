@@ -1,3 +1,7 @@
+.PHONY: clean
+clean:
+	rm -rf dist
+
 .PHONY: build
 build:
 	npm run build
@@ -7,7 +11,7 @@ test:
 	npm test
 
 .PHONY: release
-release: build test
+release: clean build test
 
 .PHONY: publish
 publish:
