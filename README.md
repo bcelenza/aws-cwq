@@ -29,6 +29,8 @@ $ AWS_PROFILE=staging AWS_REGION=us-east-1 cwq --log-group MyLogGroup 'filter @m
 
 ## Examples
 
+### Time Ranges
+
 Find errors in a specific log group over the last hour:
 
 ```bash
@@ -53,6 +55,8 @@ Find errors within a specific time range (ISO 8601 format):
 $ cwq --log-group MyLogGroup --start 2021-05-08T06:00:00Z --end 2021-05-08T12:00:00Z 'filter @message like /ERROR/'
 ```
 
+### Formats
+
 Change output format to JSON for more advanced queries (Lambda memory example):
 
 ```bash
@@ -63,4 +67,23 @@ Pipe the CSV output into a markdown formatter for sharing with friends (using [`
 
 ```bash
 $ cwq --log-group MyLogGroup 'filter @type = "REPORT" | status max(@maxMemoryUsed / 1000 / 1000) as maxMemoryUsedMB by bin(5m)' | csvtomd
+```
+
+### Log Group Matching
+
+You can provide a glob expression to the `--log-group` argument to match log group names by prefix:
+
+```bash
+$ cwq --log-group 'MyPrefix-*' 'filter @message like /ERROR/'
+```
+
+## IAM Policy Requirements
+
+In order to run this utility, the IAM entity associated with the call must `ALLOW` the following actions:
+
+```
+logs:StartQuery
+logs:GetQueryResults
+logs:StopQuery
+logs:DescribeLogGroups
 ```

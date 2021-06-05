@@ -1,9 +1,9 @@
-import parse from "parse-duration";
+import parse from 'parse-duration';
 
 // Attempts to parse a time as a duration or ISO 8601 format, returning a unix timestamp
 export const parseTimeOrDuration = (timeOrDuration: string): number => {
   // special case: `now` is now
-  if (timeOrDuration === "now") {
+  if (timeOrDuration === 'now') {
     return new Date().getTime();
   }
 
@@ -17,7 +17,7 @@ export const parseTimeOrDuration = (timeOrDuration: string): number => {
   }
 
   // otherwise, try to parse as a duration
-  const duration = parse(timeOrDuration, "ms");
+  const duration = parse(timeOrDuration, 'ms');
   if (!duration) {
     throw new Error(`Unable to parse time as a duration: ${timeOrDuration}`);
   }
