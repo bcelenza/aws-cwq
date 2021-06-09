@@ -4,6 +4,7 @@ import {
   GetQueryResultsCommandOutput,
   QueryStatus,
   StartQueryCommand,
+  StopQueryCommand,
 } from '@aws-sdk/client-cloudwatch-logs';
 import { Parser as CsvParser } from 'json2csv';
 import * as yargs from 'yargs';
@@ -43,6 +44,18 @@ const args = yargs
   .help()
   .alias('help', 'h').argv;
 
+let runningQueryId: string | undefined;
+const logsClient = new CloudWatchLogsClient({});
+process.on('SIGINT', async () => {
+  if (runningQueryId) {
+    console.error(`Cancelling running query with ID ${runningQueryId}`);
+    await logsClient.send(new StopQueryCommand({
+      queryId: runningQueryId
+    }))
+    process.exit(0);
+  }
+});
+
 (async function (): Promise<void> {
   // Parse arguments
   const logGroups = args.logGroup;
@@ -60,8 +73,6 @@ const args = yargs
     throw new Error('No query provided');
   }
   const queryString = query.toString();
-
-  const logsClient = new CloudWatchLogsClient({});
 
   // Expand log group names
   const logGroupNames = new Set<string>();
@@ -89,7 +100,7 @@ const args = yargs
       endTime,
     })
   );
-  const queryId = startOutput.queryId;
+  runningQueryId = startOutput.queryId;
 
   // Poll for the results of the query every second until it completes
   let queryResults: GetQueryResultsCommandOutput = {
@@ -100,13 +111,14 @@ const args = yargs
     await new Promise((r) => setTimeout(r, 1000));
     queryResults = await logsClient.send(
       new GetQueryResultsCommand({
-        queryId,
+        queryId: runningQueryId,
       })
     );
   } while (
     queryResults.status === QueryStatus.Scheduled ||
     queryResults.status === QueryStatus.Running
   );
+  runningQueryId = undefined;
 
   // If the command did not complete successfully, error with output
   if (queryResults.status !== QueryStatus.Complete) {
