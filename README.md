@@ -69,7 +69,7 @@ Pipe the CSV output into a markdown formatter for sharing with friends (using [`
 $ cwq --log-group MyLogGroup 'filter @type = "REPORT" | status max(@maxMemoryUsed / 1000 / 1000) as maxMemoryUsedMB by bin(5m)' | csvtomd
 ```
 
-Log only the message from the returne data (using `-m` or `--message-only`):
+Log only the message from the returned data (using `-m` or `--message-only`):
 
 ```bash
 $ cwq --message-only --logGroup MyLogGroup 'filter @message like /ERROR'
