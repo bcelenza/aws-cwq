@@ -41,6 +41,12 @@ const args = yargs
     default: 'now',
     description: 'When to end the search (duration or ISO 8601 format)',
   })
+  .option('message-only', {
+    alias: 'm',
+    type: 'boolean',
+    default: false,
+    description: 'Return just the message in plain-text format (no CSV)',
+  })
   .help()
   .alias('help', 'h').argv;
 
@@ -150,14 +156,19 @@ process.on('SIGINT', async () => {
   }
 
   // Output the results in the desired format
-  switch (args.format) {
-    case 'csv':
-      console.log(new CsvParser().parse(results));
-      break;
-    case 'json':
-      console.log(JSON.stringify(results));
-      break;
+  if (args['message-only']) {
+    results.forEach((r) => console.log(r['@message']));
+  } else {
+    switch (args.format) {
+      case 'csv':
+        console.log(new CsvParser().parse(results));
+        break;
+      case 'json':
+        console.log(JSON.stringify(results));
+        break;
+    }
   }
+  
 })().catch((e: Error) => {
   console.error(`Error: ${e.message}`);
   process.exit(1);

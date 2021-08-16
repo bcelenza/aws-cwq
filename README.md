@@ -69,6 +69,12 @@ Pipe the CSV output into a markdown formatter for sharing with friends (using [`
 $ cwq --log-group MyLogGroup 'filter @type = "REPORT" | status max(@maxMemoryUsed / 1000 / 1000) as maxMemoryUsedMB by bin(5m)' | csvtomd
 ```
 
+Log only the message from the returne data (using `-m` or `--message-only`):
+
+```bash
+$ cwq --message-only --logGroup MyLogGroup 'filter @message like /ERROR'
+```
+
 ### Log Group Matching
 
 You can provide a glob expression to the `--log-group` argument to match log group names by prefix:
