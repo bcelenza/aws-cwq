@@ -11,6 +11,7 @@ import * as yargs from 'yargs';
 
 import * as logs from './logs';
 import * as time from './time';
+import * as util from './util';
 
 const args = yargs
   .command(
@@ -157,7 +158,7 @@ process.on('SIGINT', async () => {
 
   // Output the results in the desired format
   if (args['message-only']) {
-    results.forEach((r) => console.log(r['@message']));
+    results.forEach((r) => console.log(util.unescapeValue(r['@message'])));
   } else {
     switch (args.format) {
       case 'csv':
