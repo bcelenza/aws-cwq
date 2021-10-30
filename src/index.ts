@@ -14,10 +14,7 @@ import * as time from './time';
 import * as util from './util';
 
 const args = yargs
-  .command(
-    'cwq',
-    'Executes a CloudWatch Logs Insights query and outputs the results'
-  )
+  .strictOptions()
   .option('log-group', {
     alias: 'l',
     type: 'string',
@@ -48,6 +45,7 @@ const args = yargs
     default: false,
     description: 'Return just the message in plain-text format (no CSV)',
   })
+  .demandOption('log-group', 'At least one log group is required.')
   .help()
   .alias('help', 'h').argv;
 
