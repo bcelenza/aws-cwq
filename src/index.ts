@@ -72,8 +72,8 @@ process.on('SIGINT', async () => {
 
   const inputLogGroupNames: string[] = Array.isArray(logGroups) ? logGroups : [logGroups];
 
-  const startTime = Math.ceil(time.parseTimeOrDuration(args.start) / 1000);
-  const endTime = Math.ceil(time.parseTimeOrDuration(args.end) / 1000);
+  const startTime = time.parseTimeOrDuration(args.start);
+  const endTime = time.parseTimeOrDuration(args.end);
 
   const query = args._[0];
   if (!query) {
@@ -96,15 +96,17 @@ process.on('SIGINT', async () => {
     throw new Error('No explicit or matching log groups provided.');
   }
 
-  console.error(`Querying ${logGroupNames.size} log group(s): ${JSON.stringify([...logGroupNames])}`);
+  console.error(`Querying between ${new Date(startTime).toISOString()} and ${new Date(endTime).toISOString()} 
+    for ${logGroupNames.size} log group(s): ${JSON.stringify([...logGroupNames])}`);
 
   // Execute the query
   const startOutput = await logsClient.send(
     new StartQueryCommand({
       logGroupNames: [...logGroupNames],
       queryString,
-      startTime,
-      endTime,
+      // CloudWatch uses standard unix timestamp (seconds since epoch)
+      startTime: Math.ceil(startTime / 1000),
+      endTime: Math.ceil(endTime / 1000),
     })
   );
   runningQueryId = startOutput.queryId;
