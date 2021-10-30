@@ -96,7 +96,7 @@ process.on('SIGINT', async () => {
   }
 
   console.error(`Querying between ${new Date(startTime).toISOString()} and ${new Date(endTime).toISOString()} 
-    for ${logGroupNames.size} log group(s): ${JSON.stringify([...logGroupNames])}`);
+    for ${logGroupNames.size} log group(s): ${JSON.stringify([...logGroupNames])}\n`);
 
   // Execute the query
   const startOutput = await logsClient.send(
