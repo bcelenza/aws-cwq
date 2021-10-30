@@ -7,6 +7,7 @@ import {
   StopQueryCommand,
 } from '@aws-sdk/client-cloudwatch-logs';
 import { Parser as CsvParser } from 'json2csv';
+import json2md from 'json2md';
 import * as yargs from 'yargs';
 
 import * as logs from './logs';
@@ -23,7 +24,7 @@ const args = yargs
   .option('format', {
     alias: 'f',
     type: 'string',
-    choices: ['csv', 'json'],
+    choices: ['csv', 'json', 'md', 'markdown'],
     default: 'csv',
     description: 'The format of the results',
   })
@@ -166,6 +167,17 @@ process.on('SIGINT', async () => {
         break;
       case 'json':
         console.log(JSON.stringify(results));
+        break;
+      case 'md':
+      case 'markdown':
+        console.log(json2md([
+          {
+            table: {
+              headers: Object.keys(results[0]),
+              rows: results.map(r => Object.values(r)),
+            }
+          }
+        ]));
         break;
     }
   }
