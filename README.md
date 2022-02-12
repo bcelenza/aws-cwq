@@ -34,7 +34,7 @@ Querying between 2021-10-30T18:12:46.491Z and 2021-10-30T19:12:46.491Z
 "2021-10-30 18:15:00.000","229"
 ```
 
-The default output of the command is a CSV representation of the query results for the last hour, which you can save to a file or pipe to other commands for further processing. `cwq` also supports other output formats and time ranges (see [Time Ranges](#time-ranges) and [Formats](#formats)).
+The default output of the command is a CSV representation of the query results for the last hour, which you can save to a file or pipe to other commands for further processing. `cwq` also supports other [output formats](#formats) and [time ranges](#tiem-ranges).
 
 The CLI respects any AWS environment variables provided, so you can use it across accounts and regions:
 
@@ -137,7 +137,7 @@ Querying between 2021-10-30T18:12:46.491Z and 2021-10-30T19:12:46.491Z
 Sometimes you only want the log message from the returned data. You can get that by just passing `-m` or `--message-only`:
 
 ```bash
-$ cwq --message-only --logGroup MyLogGroup 'filter @message like /ERROR'
+$ cwq --message-only --logGroup MyLogGroup 'filter @message like /ERROR/'
 
 2021-10-30T04:23:25.477Z	5bc694d8-b2e6-4147-9bba-6488c6854bb0	ERROR	Something broke
 2021-10-30T04:19:25.098Z	5bc694d8-b2e6-4147-9bba-6488c6854bb0	ERROR	Something else broke
