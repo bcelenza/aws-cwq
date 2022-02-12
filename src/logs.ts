@@ -4,7 +4,7 @@ import {
   DescribeLogGroupsCommandOutput
 } from "@aws-sdk/client-cloudwatch-logs";
 
-export const getLogGroupsByPrefix = async(logGroupPrefix: string, client: CloudWatchLogsClient): Promise<string[]> => {
+const getLogGroupsByPrefix = async(logGroupPrefix: string, client: CloudWatchLogsClient): Promise<string[]> => {
     const logGroups: string[] = [];
 
     let response: DescribeLogGroupsCommandOutput = {
@@ -25,5 +25,23 @@ export const getLogGroupsByPrefix = async(logGroupPrefix: string, client: CloudW
     } while (response.nextToken)
 
     return logGroups;
+}
+
+export const expandLogGroups = async(inputLogGroupNames: string[], client: CloudWatchLogsClient): Promise<Set<string>> => {
+  const logGroupNames = new Set<string>();
+  for (const inputName of inputLogGroupNames) {
+    if (inputName.includes('*')) {
+      // ensure only one asterisk is provided at the end
+      if (!inputName.endsWith('*') || (inputName.match(/\*/g) || []).length > 1) {
+        throw new Error(`Could not match log group by name ${inputName}: only prefix matching is supported by CloudWatch.`);
+      } 
+
+      const matchingLogGroups = await getLogGroupsByPrefix(inputName.replace(/\*/g, ''), client);
+      matchingLogGroups.forEach(g => logGroupNames.add(g));
+    } else {
+      logGroupNames.add(inputName);
+    }
+  }
+  return logGroupNames;
 }
 

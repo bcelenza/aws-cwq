@@ -81,16 +81,7 @@ process.on('SIGINT', async () => {
   const queryString = query.toString();
 
   // Expand log group names
-  const logGroupNames = new Set<string>();
-  for (const inputName of inputLogGroupNames) {
-    if (inputName.endsWith('*')) {
-      const matchingLogGroups = await logs.getLogGroupsByPrefix(inputName.replace('*', ''), logsClient);
-      matchingLogGroups.forEach(g => logGroupNames.add(g));
-    } else {
-      logGroupNames.add(inputName);
-    }
-  }
-
+  const logGroupNames = await logs.expandLogGroups(inputLogGroupNames, logsClient)
   if (logGroupNames.size === 0) {
     throw new Error('No explicit or matching log groups provided.');
   }
@@ -131,7 +122,7 @@ process.on('SIGINT', async () => {
   // If the command did not complete successfully, error with output
   if (queryResults.status !== QueryStatus.Complete) {
     throw new Error(
-      `Query did not complete: output=${JSON.stringify(queryResults)}`
+      `Query failed with status ${queryResults.status}: ${JSON.stringify(queryResults)}`
     );
   }
 
