@@ -113,11 +113,15 @@ process.on('SIGINT', async () => {
         queryId: runningQueryId,
       })
     );
+    const stats = queryResults.statistics!;
+    const megabytesScanned = ((stats.bytesScanned || 0) / 1024 / 1024).toFixed(2);
+    process.stderr.write(`\r    ${stats.recordsScanned} records (${megabytesScanned} MB) scanned, ${stats.recordsMatched} matched`);
   } while (
     queryResults.status === QueryStatus.Scheduled ||
     queryResults.status === QueryStatus.Running
   );
   runningQueryId = undefined;
+  process.stderr.write('\n\n');
 
   // If the command did not complete successfully, error with output
   if (queryResults.status !== QueryStatus.Complete) {
@@ -126,12 +130,9 @@ process.on('SIGINT', async () => {
     );
   }
 
-  if (!queryResults.results) {
-    throw new Error('No results returned');
-  }
-
+  const results = queryResults.results!;
   // Translate results into an array of key/value pairs, excluding the pointer field
-  const results = queryResults.results.map((r) => {
+  const mappedResults = results.map((r) => {
     const result: { [key: string]: string } = {};
     for (const item of r) {
       const field = item.field || '<no name>';
@@ -144,28 +145,29 @@ process.on('SIGINT', async () => {
     return result;
   });
 
-  if(results.length === 0) {
-    throw new Error('No results returned');
+  if(mappedResults.length === 0) {
+    console.error('No results returned.');
+    return;
   }
 
   // Output the results in the desired format
   if (args['message-only']) {
-    results.forEach((r) => console.log(util.unescapeValue(r['@message'])));
+    mappedResults.forEach((r) => console.log(util.unescapeValue(r['@message'])));
   } else {
     switch (args.format) {
       case 'csv':
-        console.log(new CsvParser().parse(results));
+        console.log(new CsvParser().parse(mappedResults));
         break;
       case 'json':
-        console.log(JSON.stringify(results));
+        console.log(JSON.stringify(mappedResults));
         break;
       case 'md':
       case 'markdown':
         console.log(json2md([
           {
             table: {
-              headers: Object.keys(results[0]),
-              rows: results.map(r => Object.values(r)),
+              headers: Object.keys(mappedResults[0]),
+              rows: mappedResults.map(r => Object.values(r)),
             }
           }
         ]));
