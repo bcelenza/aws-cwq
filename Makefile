@@ -1,3 +1,7 @@
+.PHONY: install
+install:
+	npm install
+
 .PHONY: clean
 clean:
 	rm -rf dist
