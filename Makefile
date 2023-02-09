@@ -16,7 +16,3 @@ test:
 
 .PHONY: release
 release: clean build test
-
-.PHONY: publish
-publish:
-	npm publish
