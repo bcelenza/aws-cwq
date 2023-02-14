@@ -16,7 +16,7 @@
   "type": "commonjs",
   "devDependencies": {
     "@semantic-release/git": "10.0.1",
-    "@types/chai": "4.2.18",
+    "@types/chai": "4.3.4",
     "@types/json2csv": "5.0.2",
     "@types/json2md": "1.5.1",
     "@types/mocha": "10.0.1",
@@ -25,7 +25,7 @@
     "@types/yargs": "16.0.1",
     "@typescript-eslint/eslint-plugin": "5.50.0",
     "@typescript-eslint/parser": "5.50.0",
-    "chai": "4.3.4",
+    "chai": "4.3.7",
     "chai-as-promised": "7.1.1",
     "eslint": "8.33.0",
     "eslint-config-prettier": "8.6.0",
