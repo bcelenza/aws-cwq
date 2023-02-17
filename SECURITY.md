@@ -10,7 +10,7 @@
 
 **Please do not report security vulnerabilities through public GitHub issues, discussions, or pull requests.**
 
-To report a vulnerability, please email bri[@]celenza.dev with details of what you've discovered. 
+To report a vulnerability, please email bri[@]celenza.dev with details of what you've discovered. Emails may optionally be encrypted with my [PGP key](https://celenza.dev/security/pgp-key) to protect the contents.
 
 Please include as much of the information listed below as you can to help me better understand and resolve the issue:
 
@@ -23,5 +23,3 @@ Please include as much of the information listed below as you can to help me bet
   * Impact of the issue, including how an attacker might exploit the issue
 
 Once received, I will respond as soon as possible with confirmation or additional questions.
-
-Emails may optionally be encrypted with my [PGP key](https://celenza.dev/security/pgp-key) to protect the contents.
