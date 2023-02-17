@@ -14,42 +14,6 @@ import * as logs from "./logs";
 import * as time from "./time";
 import * as util from "./util";
 
-const args = yargs
-  .strictOptions()
-  .option("log-group", {
-    alias: "l",
-    type: "string",
-    description: "The name of the log group",
-  })
-  .option("format", {
-    alias: "f",
-    type: "string",
-    choices: ["csv", "json", "md", "markdown"],
-    default: "csv",
-    description: "The format of the results",
-  })
-  .option("start", {
-    alias: "s",
-    type: "string",
-    default: "1h",
-    description: "When to start the search (duration or ISO 8601 format)",
-  })
-  .option("end", {
-    alias: "e",
-    type: "string",
-    default: "now",
-    description: "When to end the search (duration or ISO 8601 format)",
-  })
-  .option("message-only", {
-    alias: "m",
-    type: "boolean",
-    default: false,
-    description: "Return just the message in plain-text format (no CSV)",
-  })
-  .demandOption("log-group", "At least one log group is required.")
-  .help()
-  .alias("help", "h").argv;
-
 let runningQueryId: string | undefined;
 const logsClient = new CloudWatchLogsClient({});
 process.on("SIGINT", async () => {
@@ -66,6 +30,41 @@ process.on("SIGINT", async () => {
 
 (async function (): Promise<void> {
   // Parse arguments
+  const args = await yargs
+    .strictOptions()
+    .option("log-group", {
+      alias: "l",
+      type: "string",
+      description: "The name of the log group",
+    })
+    .option("format", {
+      alias: "f",
+      type: "string",
+      choices: ["csv", "json", "md", "markdown"],
+      default: "csv",
+      description: "The format of the results",
+    })
+    .option("start", {
+      alias: "s",
+      type: "string",
+      default: "1h",
+      description: "When to start the search (duration or ISO 8601 format)",
+    })
+    .option("end", {
+      alias: "e",
+      type: "string",
+      default: "now",
+      description: "When to end the search (duration or ISO 8601 format)",
+    })
+    .option("message-only", {
+      alias: "m",
+      type: "boolean",
+      default: false,
+      description: "Return just the message in plain-text format (no CSV)",
+    })
+    .demandOption("log-group", "At least one log group is required.")
+    .help()
+    .alias("help", "h").argv;
   const logGroups = args.logGroup;
   if (!logGroups) {
     throw new Error("A log group is required (specify with -l or --log-group)");
