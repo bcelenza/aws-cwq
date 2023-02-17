@@ -8,6 +8,9 @@ import {
 } from "@aws-sdk/client-cloudwatch-logs";
 import { Parser as CsvParser } from "json2csv";
 import json2md from "json2md";
+import sharp from "sharp";
+import * as vega from "vega";
+import * as vl from "vega-lite";
 import * as yargs from "yargs";
 
 import * as logs from "./logs";
@@ -40,7 +43,7 @@ process.on("SIGINT", async () => {
     .option("format", {
       alias: "f",
       type: "string",
-      choices: ["csv", "json", "md", "markdown"],
+      choices: ["csv", "json", "md", "markdown", "plot"],
       default: "csv",
       description: "The format of the results",
     })
@@ -192,6 +195,35 @@ process.on("SIGINT", async () => {
           ])
         );
         break;
+      case "plot": {
+        const fileName = "output.png";
+        const spec: vl.TopLevelSpec = {
+          mark: { type: "bar" },
+          encoding: {
+            x: { field: "key", type: "ordinal" },
+            y: { field: "value", type: "quantitative" },
+          },
+          height: 200,
+          width: 500,
+          data: {
+            values: [
+              { key: "A", value: 4 },
+              { key: "B", value: 8 },
+              { key: "C", value: 2 },
+              { key: "D", value: 9 },
+              { key: "E", value: 7 },
+              { key: "F", value: 4 },
+            ],
+          },
+        };
+
+        const vegaSpec = vl.compile(spec as vl.TopLevelSpec).spec;
+        const view = new vega.View(vega.parse(vegaSpec), { renderer: "none" });
+        const canvas = await view.toSVG();
+        await sharp(Buffer.from(canvas)).toFormat("png").toFile(fileName);
+        console.log(`Plot saved to ${fileName}`);
+        break;
+      }
     }
   }
 })().catch((e: Error) => {
