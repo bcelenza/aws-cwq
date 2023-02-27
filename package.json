@@ -44,7 +44,7 @@
     "json2csv": "5.0.6",
     "json2md": "2.0.0",
     "parse-duration": "1.0.2",
-    "yargs": "17.7.0"
+    "yargs": "17.7.1"
   },
   "files": [
     "/bin",
