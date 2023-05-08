@@ -16,7 +16,7 @@
   "type": "commonjs",
   "devDependencies": {
     "@semantic-release/git": "10.0.1",
-    "@types/chai": "4.3.4",
+    "@types/chai": "4.3.5",
     "@types/json2csv": "5.0.2",
     "@types/json2md": "1.5.1",
     "@types/mocha": "10.0.1",
