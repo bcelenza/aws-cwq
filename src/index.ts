@@ -62,6 +62,12 @@ process.on("SIGINT", async () => {
       default: false,
       description: "Return just the message in plain-text format (no CSV)",
     })
+    .option("limit", {
+      alias: "i",
+      type: "number",
+      default: 1000,
+      description: "The limit to the number of results returned",
+    })
     .demandOption("log-group", "At least one log group is required.")
     .help()
     .alias("help", "h").argv;
@@ -76,6 +82,7 @@ process.on("SIGINT", async () => {
 
   const startTime = time.parseTimeOrDuration(args.start);
   const endTime = time.parseTimeOrDuration(args.end);
+  const limit = args.limit;
 
   const query = args._[0];
   if (!query) {
@@ -107,6 +114,7 @@ process.on("SIGINT", async () => {
       // CloudWatch uses standard unix timestamp (seconds since epoch)
       startTime: Math.ceil(startTime / 1000),
       endTime: Math.ceil(endTime / 1000),
+      limit,
     })
   );
   runningQueryId = startOutput.queryId;
