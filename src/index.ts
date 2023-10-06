@@ -84,9 +84,15 @@ process.on("SIGINT", async () => {
   const endTime = time.parseTimeOrDuration(args.end);
   const limit = args.limit;
 
-  const query = args._[0];
+  let query = args._[0];
   if (!query) {
-    throw new Error("No query provided");
+    query = `
+      fields @timestamp, @message, @logStream, @log
+      | sort @timestamp desc
+    `;
+    console.error(
+      `No Cloudwatch Insight Query provided. Defaulting to: \n${query}`
+    );
   }
   const queryString = query.toString();
 
