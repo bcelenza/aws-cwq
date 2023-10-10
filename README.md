@@ -7,10 +7,23 @@ CWQ is designed for fast searching and presentation of log data in multiple form
 The basic command structure is:
 
 ```bash
-cwq --log-group <log-group> '<query>'
+cwq --log-group <log-group>
 ```
 
-Where `<log-group>` is the log group you want to search and `<query>` is the [CloudWatch Logs Insights query](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html) to search with.
+`<log-group>` is the log group you want to search. 
+
+If not specified, the [CloudWatch Logs Insights query](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html) will default to:
+
+```
+fields @timestamp, @message, @logStream, @log
+| sort @timestamp desc
+```
+
+
+To execute a custom query, provide it as the first positional parameter:
+ ```bash
+ cwq --log-group <log-group> '<query>'
+ ```
 
 Further usage guidelines are described below and options can be found via the help argument:
 
