@@ -12,6 +12,13 @@ cwq --log-group <log-group> '<query>'
 
 Where `<log-group>` is the log group you want to search and `<query>` is the [CloudWatch Logs Insights query](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html) to search with.
 
+If `<query>` is not specified, the [CloudWatch Logs Insights query](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html) will default to:
+
+```
+fields @timestamp, @message, @logStream, @log
+| sort @timestamp desc
+```
+
 Further usage guidelines are described below and options can be found via the help argument:
 
 ```bash
