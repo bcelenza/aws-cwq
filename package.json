@@ -20,7 +20,7 @@
     "@types/json2csv": "5.0.2",
     "@types/json2md": "1.5.2",
     "@types/mocha": "10.0.2",
-    "@types/node": "20.8.6",
+    "@types/node": "20.8.10",
     "@types/parse-duration": "0.3.0",
     "@types/yargs": "17.0.29",
     "@typescript-eslint/eslint-plugin": "6.7.4",
