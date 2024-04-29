@@ -37,7 +37,7 @@
     "semantic-release": "^23.0.8",
     "ts-mockito": "2.6.1",
     "ts-node": "10.9.2",
-    "typescript": "5.4.4"
+    "typescript": "5.4.5"
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "3.554.0",
