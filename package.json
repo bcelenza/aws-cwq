@@ -20,7 +20,7 @@
     "@types/json2csv": "5.0.2",
     "@types/json2md": "1.5.4",
     "@types/mocha": "10.0.6",
-    "@types/node": "20.14.11",
+    "@types/node": "22.0.0",
     "@types/parse-duration": "0.3.0",
     "@types/yargs": "17.0.32",
     "@typescript-eslint/eslint-plugin": "7.0.0",
@@ -40,7 +40,7 @@
     "typescript": "5.4.5"
   },
   "dependencies": {
-    "@aws-sdk/client-cloudwatch-logs": "3.616.0",
+    "@aws-sdk/client-cloudwatch-logs": "3.620.0",
     "json2csv": "5.0.6",
     "json2md": "2.0.1",
     "parse-duration": "1.1.0",
